@@ -22,3 +22,16 @@ def test_add_movie(client):
 
     artists = Artist.objects.all()
     assert len(artists) == 276
+
+
+@pytest.mark.django_db
+def test_get_single_movie(client):
+    artist = Artist.objects.create(name="The Big Band From Nowhere")
+    resp = client.get(f"/api/artists/{artist.artistid}/")
+    assert resp.status_code == 200
+    assert resp.data["name"] == "The Big Band From Nowhere"
+
+
+def test_get_single_artist_incorrect_id(client):
+    resp = client.get("/api/artists/foo/")
+    assert resp.status_code == 404
