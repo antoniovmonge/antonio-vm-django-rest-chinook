@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from chinook.models import Albums, Artists
+
+
+@admin.register(Albums)
+class AlbumsAdmin(admin.ModelAdmin):
+    fields = ("album_id", "title", "artistid")
+    list_display = ("album_id", "title", "artistid")

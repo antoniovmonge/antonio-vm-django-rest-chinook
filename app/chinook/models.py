@@ -6,6 +6,9 @@ class Albums(models.Model):
     title = models.TextField(db_column="Title")
     artistid = models.ForeignKey("Artists", models.DO_NOTHING, db_column="ArtistId")
 
+    def __str__(self):
+        return f"{self.title}"
+
     class Meta:
         managed = False
         db_table = "albums"
@@ -14,6 +17,9 @@ class Albums(models.Model):
 class Artists(models.Model):
     artistid = models.AutoField(db_column="ArtistId", primary_key=True)
     name = models.TextField(db_column="Name", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
 
     class Meta:
         managed = False
@@ -36,6 +42,9 @@ class Customers(models.Model):
     supportrepid = models.ForeignKey(
         "Employees", models.DO_NOTHING, db_column="SupportRepId", blank=True, null=True
     )
+
+    def __str__(self):
+        return f"{self.email}"
 
     class Meta:
         managed = False
@@ -61,6 +70,9 @@ class Employees(models.Model):
     fax = models.TextField(db_column="Fax", blank=True, null=True)
     email = models.TextField(db_column="Email", blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.email}"
+
     class Meta:
         managed = False
         db_table = "employees"
@@ -69,6 +81,9 @@ class Employees(models.Model):
 class Genres(models.Model):
     genreid = models.AutoField(db_column="GenreId", primary_key=True)
     name = models.TextField(db_column="Name", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
 
     class Meta:
         managed = False
@@ -108,6 +123,9 @@ class Invoices(models.Model):
 class MediaTypes(models.Model):
     mediatypeid = models.AutoField(db_column="MediaTypeId", primary_key=True)
     name = models.TextField(db_column="Name", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
 
     class Meta:
         managed = False

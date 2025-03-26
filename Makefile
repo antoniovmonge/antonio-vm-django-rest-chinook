@@ -10,3 +10,9 @@ up:
 reset:
 	docker compose down -v
 	docker compose up --build
+
+migrations:
+	docker compose exec web python manage.py makemigrations
+
+migrate:
+	docker compose exec web python manage.py migrate
