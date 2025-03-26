@@ -17,6 +17,11 @@ class AlbumList(APIView):
 
 
 class ArtistList(APIView):
+    def get(self, request, format=None):
+        artists = Artist.objects.all()
+        serializer = ArtistSerializer(artists, many=True)
+        return Response(serializer.data)
+
     def post(self, request, format=None):
         serializer = ArtistSerializer(data=request.data)
         if serializer.is_valid():
