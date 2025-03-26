@@ -1,5 +1,5 @@
 import pytest
-from chinook.models import Albums, Artists
+from chinook.models import Album, Artist
 
 
 # @pytest.mark.django_db
@@ -12,6 +12,6 @@ from chinook.models import Albums, Artists
 
 @pytest.mark.django_db
 def test_artists_model():
-    artist = Artists.objects.create(name="Artist Name")
+    artist = Artist.objects.create(name="Artist Name")
     # assert artist.artistid == 1
     assert artist.name == "Artist Name"
