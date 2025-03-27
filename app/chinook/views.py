@@ -15,7 +15,7 @@ from .serializers import (
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 50
+    page_size = 10
     page_size_query_param = "page_size"
     max_page_size = 100
 
@@ -30,29 +30,12 @@ class AlbumList(ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 
-# class AlbumList(APIView):
-#     def get(self, request, format=None):
-#         albums = Album.objects.all()
-#         serializer = AlbumSerializer(albums, many=True)
-#         return Response(serializer.data)
-
-
-class ArtistList(APIView):
+class ArtistList(ListAPIView):
     pagination_class = StandardResultsSetPagination
 
-    def get(self, request, format=None):
-        artists = Artist.objects.all()
-        paginator = self.pagination_class()
-        result_page = paginator.paginate_queryset(artists, request)
-        serializer = ArtistSerializer(result_page, many=True)
-        return paginator.get_paginated_response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = ArtistSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    pagination_class = StandardResultsSetPagination
 
 
 class ArtistDetail(APIView):
@@ -104,17 +87,11 @@ class AlbumTracks(APIView):
         return Response(serializer.data)
 
 
-class AlbumSummaryList(APIView):
+class AlbumSummaryList(ListAPIView):
     """
     Obtener todos los álbumes, incluyendo el nombre del artista y el número total tracks
     """
 
+    queryset = Album.objects.all().select_related("artist_id")
+    serializer_class = AlbumSummarySerializer
     pagination_class = StandardResultsSetPagination
-
-    def get(self, request, format=None):
-        albums = Album.objects.all().select_related("artist_id")
-        paginator = self.pagination_class()
-        result_page = paginator.paginate_queryset(albums, request)
-        serializer = AlbumSummarySerializer(result_page, many=True)
-
-        return paginator.get_paginated_response(serializer.data)
