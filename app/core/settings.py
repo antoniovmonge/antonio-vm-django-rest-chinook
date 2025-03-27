@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 3rd-party apps
     "rest_framework",
-    "drf_yasg",
+    "drf_spectacular",
+    # Local apps
     "chinook",
     "users",
 ]
@@ -128,6 +130,12 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-SWAGGER_USE_COMPAT_RENDERERS = False
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
-SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Chinook API Project",
+    "DESCRIPTION": "Simple Proyecto con DRF",
+    "VERSION": "1.0.0",
+}
