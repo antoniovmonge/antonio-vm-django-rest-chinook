@@ -72,3 +72,24 @@ agregados:
 
     - Nombre del músico / grupo.
     - Número total de canciones.
+
+## Estructura
+
+```bash
+django-rest-chinook/
+.envs                           # Variables de entorno
+│   ├── .local/
+│   └── .prod/
+├── app/                        # Directorio principal de la aplicación
+│   ├── chinook/                # App Chinook (modelos, vistas, serializadores)
+│   ├── core/                   # Configuraciones principales del proyecto Django
+│   ├── tests/                  # Directorio de pruebas
+│   ├── users/                  # Modelo de usuario personalizado
+│   ├── conftest.py             # Configuración de Pytest
+│   ├── manage.py               # Script de gestión de Django
+│   ├── requirements.txt        # Dependencias del proyecto
+│   └── chinook.db              # Archivo de base de datos SQLite
+├── docker-compose.yml          # Configuración de Docker Compose
+├── Makefile                    # Comandos útiles
+└── README.md                   # Documentación del proyecto
+```
