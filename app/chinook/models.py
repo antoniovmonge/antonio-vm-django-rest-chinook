@@ -12,6 +12,7 @@ class Album(models.Model):
     class Meta:
         managed = False
         db_table = "albums"
+        ordering = ["album_id"]
 
 
 class Artist(models.Model):
@@ -24,6 +25,7 @@ class Artist(models.Model):
     class Meta:
         managed = False
         db_table = "artists"
+        ordering = ["artist_id"]
 
 
 class Customer(models.Model):
@@ -49,6 +51,7 @@ class Customer(models.Model):
     class Meta:
         managed = False
         db_table = "customers"
+        ordering = ["customer_id"]
 
 
 class Employee(models.Model):
@@ -76,6 +79,7 @@ class Employee(models.Model):
     class Meta:
         managed = False
         db_table = "employees"
+        ordering = ["employee_id"]
 
 
 class Genre(models.Model):
@@ -182,3 +186,4 @@ class Track(models.Model):
     class Meta:
         managed = False
         db_table = "tracks"
+        ordering = ["track_id"]

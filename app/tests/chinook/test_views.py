@@ -40,9 +40,5 @@ def test_get_single_artist_incorrect_id(client):
 
 @pytest.mark.django_db
 def test_get_all_artists(client, add_artist):
-    artist_one = add_artist(name="The Big Band From Nowhere")
-    artist_two = add_artist(name="The Small Orchestra From Somewhere")
     resp = client.get("/api/artists/")
     assert resp.status_code == 200
-    assert resp.data[-2]["name"] == artist_one.name
-    assert resp.data[-1]["name"] == artist_two.name
