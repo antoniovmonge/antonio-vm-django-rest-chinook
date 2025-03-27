@@ -4,7 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Album, Artist
-from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
+from .serializers import (
+    AlbumSerializer,
+    ArtistSerializer,
+    TrackSerializer,
+    AlbumSummarySerializer,
+)
 
 
 class AlbumList(APIView):
@@ -76,4 +81,15 @@ class AlbumTracks(APIView):
         album = self.get_album(pk)
         tracks = album.track_set.all()
         serializer = TrackSerializer(tracks, many=True)
+        return Response(serializer.data)
+
+
+class AlbumSummaryList(APIView):
+    """
+    Obtener todos los álbumes, incluyendo el nombre del artista y el número total tracks
+    """
+
+    def get(self, request, format=None):
+        albums = Album.objects.all().select_related("artist_id")
+        serializer = AlbumSummarySerializer(albums, many=True)
         return Response(serializer.data)

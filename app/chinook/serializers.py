@@ -22,3 +22,15 @@ class TrackSerializer(serializers.ModelSerializer):
         model = Track
         fields = "__all__"
         read_only_fields = ["track_id"]
+
+
+class AlbumSummarySerializer(serializers.ModelSerializer):
+    artist_name = serializers.CharField(source="artist_id.name")
+    total_tracks = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Album
+        fields = ["album_id", "title", "artist_name", "total_tracks"]
+
+    def get_total_tracks(self, obj):
+        return obj.track_set.count()
