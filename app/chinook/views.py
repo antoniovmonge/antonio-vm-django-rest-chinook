@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Album, Artist
-from .serializers import AlbumSerializer, ArtistSerializer
+from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
 
 
 class AlbumList(APIView):
@@ -40,4 +40,40 @@ class ArtistDetail(APIView):
     def get(self, request, pk, format=None):
         artist = self.get_object(pk)
         serializer = ArtistSerializer(artist)
+        return Response(serializer.data)
+
+
+class ArtistAlbums(APIView):
+    """
+    Obtener todos los álbumes de un artista específico
+    """
+
+    def get_artist(self, pk):
+        try:
+            return Artist.objects.get(pk=pk)
+        except Artist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        artist = self.get_artist(pk)
+        albums = Album.objects.filter(artist_id=artist)
+        serializer = AlbumSerializer(albums, many=True)
+        return Response(serializer.data)
+
+
+class AlbumTracks(APIView):
+    """
+    Obtener todas las pistas de un álbum específico
+    """
+
+    def get_album(self, pk):
+        try:
+            return Album.objects.get(pk=pk)
+        except Album.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        album = self.get_album(pk)
+        tracks = album.track_set.all()
+        serializer = TrackSerializer(tracks, many=True)
         return Response(serializer.data)

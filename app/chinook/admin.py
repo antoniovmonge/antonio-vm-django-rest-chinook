@@ -5,11 +5,11 @@ from chinook.models import Album, Artist
 
 @admin.register(Album)
 class AlbumsAdmin(admin.ModelAdmin):
-    fields = ("album_id", "title", "artistid")
-    list_display = ("album_id", "title", "artistid")
+    fields = ("album_id", "title", "artist_id")
+    list_display = ("album_id", "title", "artist_id")
 
 
 @admin.register(Artist)
 class ArtistsAdmin(admin.ModelAdmin):
-    fields = ("artistid", "name")
-    list_display = ("artistid", "name")
+    fields = ("artist_id", "name")
+    list_display = ("artist_id", "name")

@@ -6,7 +6,7 @@ from chinook.serializers import AlbumSerializer
 def test_valid_album_serializer():
     valid_serializer_data = {
         "title": "Album Title",
-        "artistid": 1,
+        "artist_id": 1,
     }
     serializer = AlbumSerializer(data=valid_serializer_data)
     assert serializer.is_valid()
@@ -22,4 +22,4 @@ def test_invalid_album_serializer():
     serializer = AlbumSerializer(data=invalid_serializer_data)
     assert not serializer.is_valid()
     assert serializer.validated_data == {}
-    assert serializer.errors == {"artistid": ["This field is required."]}
+    assert serializer.errors == {"artist_id": ["This field is required."]}

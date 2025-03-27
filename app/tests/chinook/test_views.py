@@ -27,7 +27,7 @@ def test_add_artist(client):
 @pytest.mark.django_db
 def test_get_single_artist(client, add_artist):
     artist = add_artist(name="The Big Band From Nowhere")
-    resp = client.get(f"/api/artists/{artist.artistid}/")
+    resp = client.get(f"/api/artists/{artist.artist_id}/")
     assert resp.status_code == 200
     assert resp.data["name"] == "The Big Band From Nowhere"
 
