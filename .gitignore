@@ -128,7 +128,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.envs/
+# .envs/
 .env
 .venv
 env/
@@ -176,6 +176,7 @@ cython_debug/
 
 # Databases
 *.db
+!chinook.db
 
 # Config VScode
 .vscode

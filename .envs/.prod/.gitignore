@@ -1,0 +1,3 @@
+# keep this folder and this .gitignore file but ignore all the rest of th content
+*
+!.gitignore

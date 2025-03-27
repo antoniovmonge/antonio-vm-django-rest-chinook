@@ -1,0 +1,6 @@
+# Estas variables de entorno sólo son para el entorno de desarrollo.
+# NUNCA deben ser usadas en producción.
+
+DEBUG=1
+SECRET_KEY=esta_key_solo_es_para_desarrollo
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
