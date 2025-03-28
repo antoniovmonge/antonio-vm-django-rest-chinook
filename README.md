@@ -7,6 +7,8 @@
 - [Puesta en marcha](#puesta-en-marcha)
 - [Documentación de la API](#documentación-de-la-api)
 - [Estructura del Proyecto](#estructura-del-proyecto)
+- [Implementación de Cacheing (Redis)](#implementación-de-cacheing-redis)
+- [Despliegue en AWS (EC2 o ECS)](#despliegue-aws-ec2-o-ecs)
 
 ## Visión General
 
@@ -255,3 +257,61 @@ django-rest-chinook/
 ├── Makefile                    # Comandos útiles
 └── README.md                   # Documentación del proyecto
 ```
+
+## Implementación de Cacheing (Redis)
+
+Utilizaría un sistema de cacheo para almacenar respuestas de consultas con las siguientes características:
+
+- los datos a los que hace referencia no cambian con frecuencia (Son medianamente estables)
+- son de un tamaño considerable o de alto coste computacional
+- se hace esa consulta muy a menudo
+
+Esto mejoraría el rendimiento de la API y reduciría la carga en la base de datos.
+
+Añadiría Redis como servicio en el `docker-compose.yml` y configuraría Django para usar Redis como backend de cacheo.
+
+Por ejemplo:
+
+`settings.py`
+
+```python
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Tiempo de vida del caché (en segundos) - 15 minutos
+CACHE_TTL = 60 * 15
+```
+
+Luego incorporaría los decoradores a los metodos de vista que quiero cachear:
+
+```python
+class MuchosDeEstosView(APIView):
+  @method_decorator(cache_page(settings.CACHE_TTL))
+  def get(self, request):
+    # Lógica de la vista
+    pass
+```
+
+Así, cada vez que se haga una petición a la vista, Django primero buscará en la memoria caché. Si la respuesta no está en caché, se ejecutará la lógica de la vista y almacenará la respuesta en el caché para las próximas peticiones.
+
+## Despliegue en AWS (EC2 o ECS)
+
+Dadas las carácterísiticas del proyecto haría un despliegue en AWS usando EC2 o ECS (Elastic Container Service).
+
+En lugar de usar SQLite, crearía una configuración para staging y producción que usase PostgreSQL o AWS RDS.
+
+El docker-compose que usaría se llamaría `docker-compose.prod.yml` e incluiría los servicios de PostgreSQL y Nginx.
+
+Si usase ECS subiría las imagenes de Docker a ECR (Elastic Container Registry) y crearía un clúster de ECS para ejecutar los contenedores. Esto es un despliegue manual que intentaría automatizar con Terraform.
+
+En el caso de usar EC2, crearía una instancia EC2 y desplegaría el contenedor Docker directamente en la instancia. Configuraría Nginx como proxy inverso para dirigir el tráfico a la aplicación Django.
+
+A parte de todo esto haría falta configurar un dominio y un certificado SSL para asegurar la comunicación entre el cliente y el servidor. Esto lo haría con AWS Route 53 o NameCheap y AWS Certificate Manager.
