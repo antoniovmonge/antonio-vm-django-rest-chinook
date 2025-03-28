@@ -1,79 +1,241 @@
 # Django REST Framework - Chinook API
 
+## Tabla de Contenidos
+
+- [Visión General](#visión-general)
+- [Características](#características)
+- [Puesta en marcha](#puesta-en-marcha)
+- [Documentación de la API](#documentación-de-la-api)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+
 ## Visión General
 
-Este proyecto proporciona una API RESTful para la base de datos Chinook. Se trata de una base de datos de muestra que representa una tienda de medios digitales que incluye tablas para artistas, álbumes, tracks, empleados y más. Está construido con Django y Django REST Framework.
+Este proyecto proporciona una API RESTful para la base de datos Chinook. Se trata de una base de datos de muestra que representa una tienda de medios digitales que incluye tablas para artistas, álbumes, tracks, empleados y más.
 
 ## Características
 
 - Endpoints de API RESTful para acceder a artistas, álbumes y pistas.
 - Soporte para paginación.
-- Documentación Swagger.
+- Documentación interactiva con Swagger
 - Contenedorización con Docker y Docker Compose.
-- Test suite con Pytest.
+- Test suite con Pytest
 
-## Tabla de Contenidos
+## Puesta en marcha
 
-### Instalación
+1. Requisitos:
 
-Con Docker
-Sin Docker
+    - **Docker** y **Docker Compose** previamente instalados.
 
-### Documentación de la API
-
-- Listar todos los artistas
-- Obtener detalles del artista
-- Listar todos los álbumes
-- Obtener álbumes del artista
-- Obtener pistas del álbum
-- Obtener resumen del álbum
-
-### Pruebas
-
-### Estructura del Proyecto
-
----
----
-
-## Levantar el proyecto
-
-1. Clonar el repositorio y cambiar al directorio del proyecto:
+2. Clonar el repositorio y cambiar al directorio del proyecto:
 
     ```bash
     git clone https://github.com/antoniovmonge/django-rest-chinook.git
     cd django-rest-chinook
     ```
 
-2. Levantar el proyecto con **docker-compose**:
+3. Levantar el proyecto con **docker-compose**:
 
     ```bash
     docker-compose up
     ```
 
-3. ℹ️ Variables de entorno.
+4. ℹ️ Variables de entorno.
 
     Se han incluído variables de entorno que sólo serán utilizables en el entorno de desarrollo en local. Están localizadas en la ruta `.envs/.local/.django`
 
-4. ℹ️ Base de datos.
+5. ℹ️ Base de datos.
 
     Al tratarse de una base de datos muy pequeña y para facilitar la puesta en marcha del proyecto se ha incluído en el repositorio.
     Se trata de una base de datos SQLite que se encuentra en la ruta `app/chinook.db`.
 
-## Endpoints requeridos
+## Documentación de la API
 
-1. GET /artists/ → Devuelve una lista de todos los músicos / grupos.
-2. GET /albums/ → Devuelve una lista de todos los discos con sus canciones.
-3. GET /artists/{artist_id}/albums/ → Dado un músico / grupo, devuelve un listado de todos sus
+ℹ️ Se puede acceder a la documentación Swagger en <http://127.0.0.1:8000/api/v1/schema/swagger-ui/> para explorar la API de forma interactiva.
+
+### Listado de endpoints
+
+1. `GET /artists/` → Devuelve una lista de todos los músicos / grupos.
+2. `GET /albums/` → Devuelve una lista de todos los discos con sus canciones.
+3. `GET /artists/{artist_id}/albums/` → Dado un músico / grupo, devuelve un listado de todos sus
 discos.
-4. GET /albums/{album_id}/tracks/ → Dado un disco, devuelve un listado de todas las
+4. `GET /albums/{album_id}/tracks/` → Dado un disco, devuelve un listado de todas las
 canciones.
-5. GET /albums/summary/ → Devuelve un listado de todos los discos con los siguientes datos
+5. `GET /albums/summary/` → Devuelve un listado de todos los discos con los siguientes datos
 agregados:
 
     - Nombre del músico / grupo.
     - Número total de canciones.
 
-## Estructura
+### Ejemplo de uso de la API
+
+ℹ️ Para probar los endpoints, puedes usar herramientas como Postman o cURL. A continuación se muestran ejemplos de uso con cURL.
+
+#### Listar todos los artistas
+
+Recupera una lista paginada de todos los músicos/grupos.
+
+Endpoint: `GET /api/v1/artists/`
+
+Ejemplo cURL:
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/artists/" -H "accept: application/json"
+```
+
+Respuesta:
+
+```json
+{
+  "count": 275,
+  "next": "http://localhost:8000/api/v1/artists/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "artist_id": 1,
+      "name": "AC/DC"
+    },
+    {
+      "artist_id": 2,
+      "name": "Accept"
+    },
+    // ... más artistas
+  ]
+}
+```
+
+#### Listar todos los álbumes
+
+Recupera una lista paginada de todos los discos.
+
+Endpoint: `GET /api/v1/albums/`
+
+Ejemplo cURL:
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/albums/" -H "accept: application/json"
+```
+
+Respuesta:
+
+```json
+{
+  "count": 347,
+  "next": "http://localhost:8000/api/v1/albums/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "album_id": 1,
+      "title": "For Those About To Rock We Salute You",
+      "artist_id": 1
+    },
+    {
+      "album_id": 2,
+      "title": "Balls to the Wall",
+      "artist_id": 2
+    },
+    // ... más discos
+  ]
+}
+```
+
+#### Obtener discos del artista
+
+Recupera todos los álbumes de un artista específico.
+
+Endpoint: `GET /api/v1/artists/{artist_id}/albums/`
+
+Ejemplo cURL:
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/artists/1/albums/" -H "accept: application/json"
+```
+
+Respuesta:
+
+```json
+[
+  {
+    "album_id": 1,
+    "title": "For Those About To Rock We Salute You",
+    "artist_id": 1
+  },
+  {
+    "album_id": 4,
+    "title": "Let There Be Rock",
+    "artist_id": 1
+  }
+]
+```
+
+#### Obtener las canciones del disco
+
+Recupera todas las canciones de un disco específico.
+
+Endpoint: `GET /api/v1/albums/{album_id}/tracks/`
+
+Ejemplo cURL:
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/albums/1/tracks/" -H "accept: application/json"
+```
+
+Respuesta:
+
+```json
+[
+  {
+    "track_id": 1,
+    "name": "For Those About To Rock (We Salute You)",
+    "albumid": 1,
+    "mediatypeid": 1,
+    "genre_id": 1,
+    "composer": "Angus Young, Malcolm Young, Brian Johnson",
+    "milliseconds": 343719,
+    "bytes": 11170334,
+    "unitprice": "0.99"
+  },
+  // ... más pistas
+]
+```
+
+#### Obtener todos los discos con resumen
+
+Recupera un resumen de todos los discos, incluyendo el nombre del artista y el número total de canciones.
+
+Endpoint: `GET /api/v1/albums/summary/`
+
+Ejemplo cURL:
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/albums/summary/" -H "accept: application/json"
+```
+
+Respuesta:
+
+```json
+{
+  "count": 347,
+  "next": "http://127.0.0.1:8000/api/v1/albums/summary/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "album_id": 1,
+      "title": "For Those About To Rock We Salute You",
+      "artist_name": "AC/DC",
+      "total_tracks": 10
+    },
+    {
+      "album_id": 2,
+      "title": "Balls to the Wall",
+      "artist_name": "Accept",
+      "total_tracks": 1
+    },
+    // ...
+  ]
+}
+```
+
+## Estructura del Proyecto
 
 ```bash
 django-rest-chinook/
