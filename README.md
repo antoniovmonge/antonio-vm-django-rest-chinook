@@ -196,7 +196,7 @@ Respuesta:
     "bytes": 11170334,
     "unitprice": "0.99"
   },
-  // ... más pistas
+  // ...
 ]
 ```
 
