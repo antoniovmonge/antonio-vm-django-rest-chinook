@@ -1,5 +1,5 @@
 import pytest
-from chinook.models import Artist
+from chinook.models import Artist, Album
 from django.conf import settings
 
 DEFAULT_ENGINE = "django.db.backends.sqlite3"
@@ -21,3 +21,15 @@ def add_artist():
         return artist
 
     return _add_artist
+
+
+@pytest.fixture(scope="function")
+def add_album():
+    def _add_album(title, artist):
+        album = Album.objects.create(
+            title=title,
+            artist_id=artist,
+        )
+        return album
+
+    return _add_album

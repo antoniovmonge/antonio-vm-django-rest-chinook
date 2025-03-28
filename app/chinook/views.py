@@ -1,5 +1,4 @@
 from django.http import Http404
-from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -38,17 +37,17 @@ class ArtistList(ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 
-class ArtistDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return Artist.objects.get(pk=pk)
-        except Artist.DoesNotExist:
-            raise Http404
+# class ArtistDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Artist.objects.get(pk=pk)
+#         except Artist.DoesNotExist:
+#             raise Http404
 
-    def get(self, request, pk, format=None):
-        artist = self.get_object(pk)
-        serializer = ArtistSerializer(artist)
-        return Response(serializer.data)
+#     def get(self, request, pk, format=None):
+#         artist = self.get_object(pk)
+#         serializer = ArtistSerializer(artist)
+#         return Response(serializer.data)
 
 
 class ArtistAlbums(APIView):
