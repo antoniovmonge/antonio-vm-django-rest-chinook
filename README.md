@@ -8,7 +8,7 @@
 - [Documentación de la API](#documentación-de-la-api)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Implementación de Cacheing (Redis)](#implementación-de-cacheing-redis)
-- [Despliegue en AWS (EC2 o ECS)](#despliegue-aws-ec2-o-ecs)
+- [Despliegue en AWS (EC2 o ECS)](#despliegue-en-aws-ec2-o-ecs)
 
 ## Visión General
 
@@ -100,7 +100,7 @@ Respuesta:
       "artist_id": 2,
       "name": "Accept"
     },
-    // ... más artistas
+    // ...
   ]
 }
 ```
@@ -135,7 +135,7 @@ Respuesta:
       "title": "Balls to the Wall",
       "artist_id": 2
     },
-    // ... más discos
+    // ...
   ]
 }
 ```
